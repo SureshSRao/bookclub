@@ -1,4 +1,4 @@
-package com.bookclub.bookclub;
+package com.bookclub;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
