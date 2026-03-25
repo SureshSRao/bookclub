@@ -1,47 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Bookclub | Welcome</title>
-</head>
-<body>
-    <h1>Welcome to the Bookclub application!</h1>
-</body>
-</html><!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Bookclub | Welcome</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
           rel="stylesheet">
 </head>
 <body>
 
-    <!-- Header Fragment -->
-    <div th:insert="~{fragments/header :: header}"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
-    <main>
-        <section class="py-5 text-center container">
-            <div class="row py-lg-5">
-                <div class="col-lg-6 col-md-8 mx-auto">
-
-                    <h1>Welcome to the Bookclub application!</h1>
-
-                    <p class="lead text-muted">
-                        Welcome to the Book Club app, your one stop shop for all of your book club needs.
-                        Below you will find a list of this month’s top 10 favorite books.
-                    </p>
-
-                </div>
+<main>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-4">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <h1 class="fw-light">Welcome to the Bookclub application!</h1>
+                <p class="lead text-muted">
+                    View this month's featured books and select one to see more details.
+                </p>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <!-- Footer Fragments -->
-    <div th:insert="~{fragments/footer :: footer}"></div>
-    <div th:insert="~{fragments/scriptFooter :: scriptFooter}"></div>
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+                <div class="col" th:each="book : ${books}">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${book.title}">Book Title</h5>
+
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    ISBN:
+                                    <span th:text="${book.isbn}">1234567890</span>
+                                </small>
+                            </p>
+
+                            <p class="card-text">
+                                <span th:text="${book.description}">Book description.</span>
+                            </p>
+
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Pages:
+                                    <span th:text="${book.numOfPages}">100</span>
+                                </small>
+                            </p>
+
+                            <div class="btn-group">
+                                <a th:href="@{/{id}(id=${book.isbn})}"
+                                   class="btn btn-sm btn-outline-secondary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+<div th:insert="~{fragments/scriptFooter :: scriptFooter}"></div>
 
 </body>
 </html>
