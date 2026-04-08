@@ -1,12 +1,13 @@
 /*
- * Suresh, S. (2026). CIS 530 Server-Side Development. Bellevue University.
+ * Suresh, Sripathi Rao. (2026). CIS 530 Server-Side Development. Bellevue University.
  */
 
 package com.bookclub.web;
 
 import com.bookclub.model.WishlistItem;
-import com.bookclub.service.impl.MemWishlistDao;
+import com.bookclub.service.dao.WishlistDao;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,18 @@ import java.util.List;
 @RequestMapping("/wishlist")
 public class WishlistController {
 
+    private WishlistDao wishlistDao;
+
+    /**
+     * Sets the wishlist DAO.
+     *
+     * @param wishlistDao the wishlist DAO implementation
+     */
+    @Autowired
+    private void setWishlistDao(WishlistDao wishlistDao) {
+        this.wishlistDao = wishlistDao;
+    }
+
     /**
      * Displays the wishlist page.
      *
@@ -31,7 +44,6 @@ public class WishlistController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String showWishlist(Model model) {
-        MemWishlistDao wishlistDao = new MemWishlistDao();
         List<WishlistItem> wishlist = wishlistDao.list();
 
         model.addAttribute("wishlist", wishlist);
@@ -59,10 +71,13 @@ public class WishlistController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public String addWishlistItem(@Valid WishlistItem wishlistItem, BindingResult bindingResult) {
+        System.out.println(wishlistItem.toString());
+
         if (bindingResult.hasErrors()) {
             return "wishlist/new";
         }
 
+        wishlistDao.add(wishlistItem);
         return "redirect:/wishlist";
     }
 }

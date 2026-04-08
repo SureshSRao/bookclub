@@ -6,12 +6,16 @@ package com.bookclub.model;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.annotation.Id;
 
 /**
  * WishlistItem model class.
  * This class stores information for a single wishlist item.
  */
 public class WishlistItem {
+
+    @Id
+    private String id;
 
     @NotNull(message = "ISBN is a required field.")
     @NotEmpty(message = "ISBN is a required field.")
@@ -36,6 +40,24 @@ public class WishlistItem {
     public WishlistItem(String isbn, String title) {
         this.isbn = isbn;
         this.title = title;
+    }
+
+    /**
+     * Returns the id.
+     *
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the id.
+     *
+     * @param id the id value
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -76,6 +98,6 @@ public class WishlistItem {
 
     @Override
     public String toString() {
-        return "WishlistItem{isbn=" + isbn + ", title=" + title + "}";
+        return "WishlistItem{id=" + id + ", isbn=" + isbn + ", title=" + title + "}";
     }
 }
