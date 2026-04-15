@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head></head>
 <body>
 
@@ -7,30 +8,51 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
 
-            <a class="navbar-brand" href="/">BookClub</a>
+            <!-- Brand -->
+            <a class="navbar-brand" th:href="@{/}">BookClub</a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavBar" aria-controls="navbarNavBar"
-                    aria-expanded="false" aria-label="Toggle navigation">
+            <!-- Toggle for mobile -->
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavBar"
+                    aria-controls="navbarNavBar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNavBar">
-                <ul class="navbar-nav">
+            <!-- Navbar content -->
+            <div class="collapse navbar-collapse d-flex justify-content-between align-items-center"
+                 id="navbarNavBar">
 
+                <!-- Left Menu -->
+                <ul class="navbar-nav flex-row gap-3">
                     <li class="nav-item">
-                        <a class="nav-link" href="/about" th:href="@{/about}">About Us</a>
+                        <a class="nav-link" th:href="@{/about}">About Us</a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="/contact" th:href="@{/contact}">Contact Us</a>
+                        <a class="nav-link" th:href="@{/contact}">Contact Us</a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="/wishlist" th:href="@{/wishlist}">Wishlist</a>
+                        <a class="nav-link" th:href="@{/wishlist}">Wishlist</a>
                     </li>
-
                 </ul>
+
+                <!-- Center (Logged in user) -->
+                <div class="d-flex justify-content-center flex-grow-1"
+                     sec:authorize="isAuthenticated()">
+                    Logged in as
+                    <strong class="ms-1" sec:authentication="name"></strong>
+                </div>
+
+                <!-- Right (Logout) -->
+                <ul class="navbar-nav flex-row"
+                    sec:authorize="isAuthenticated()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Logout</a>
+                    </li>
+                </ul>
+
             </div>
 
         </div>
