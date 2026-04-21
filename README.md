@@ -11,4 +11,6 @@ Assignment 3.2 - Forms and Data Validation - 4/1/2026
 Assignment 4.2 - Data Persistence with MongoDB - 4/8/2026
 
 Assignment 5.2 - Access Management - 4/14/2026
+
+Assignment 6.2 - RESTful Controllers - 4/20/2026
  

@@ -8,10 +8,8 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
 
-            <!-- Brand -->
             <a class="navbar-brand" th:href="@{/}">BookClub</a>
 
-            <!-- Toggle for mobile -->
             <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarNavBar"
@@ -21,11 +19,9 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Navbar content -->
             <div class="collapse navbar-collapse d-flex justify-content-between align-items-center"
                  id="navbarNavBar">
 
-                <!-- Left Menu -->
                 <ul class="navbar-nav flex-row gap-3">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/about}">About Us</a>
@@ -38,16 +34,20 @@
                     </li>
                 </ul>
 
-                <!-- Center (Logged in user) -->
                 <div class="d-flex justify-content-center flex-grow-1"
                      sec:authorize="isAuthenticated()">
                     Logged in as
                     <strong class="ms-1" sec:authentication="name"></strong>
                 </div>
 
-                <!-- Right (Logout) -->
-                <ul class="navbar-nav flex-row"
+                <ul class="navbar-nav flex-row gap-3"
                     sec:authorize="isAuthenticated()">
+                    <li class="nav-item">
+                        <a href="/swagger-ui/index.html"
+                           th:href="@{/swagger-ui/index.html}"
+                           class="nav-link"
+                           target="_blank">OpenAPI Specification</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/logout}">Logout</a>
                     </li>

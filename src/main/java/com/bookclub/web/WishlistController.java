@@ -14,8 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.List;
-
 /**
  * WishlistController class.
  * This class handles requests for the wishlist pages.
@@ -39,14 +37,10 @@ public class WishlistController {
     /**
      * Displays the wishlist page.
      *
-     * @param model model object
      * @return wishlist/list view
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String showWishlist(Model model) {
-        List<WishlistItem> wishlist = wishlistDao.list();
-
-        model.addAttribute("wishlist", wishlist);
+    public String showWishlist() {
         return "wishlist/list";
     }
 
@@ -71,8 +65,6 @@ public class WishlistController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public String addWishlistItem(@Valid WishlistItem wishlistItem, BindingResult bindingResult) {
-        System.out.println(wishlistItem.toString());
-
         if (bindingResult.hasErrors()) {
             return "wishlist/new";
         }
