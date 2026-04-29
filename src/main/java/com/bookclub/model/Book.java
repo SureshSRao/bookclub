@@ -4,41 +4,27 @@
 
 package com.bookclub.model;
 
-import java.util.List;
-
 /**
  * Book model class.
- * This class stores information for a single book.
+ * This class stores book information returned from the OpenLibrary API.
  */
 public class Book {
 
     private String isbn;
     private String title;
     private String description;
+    private String infoUrl;
     private int numOfPages;
-    private List<String> authors;
 
-    /**
-     * Default constructor.
-     */
     public Book() {
     }
 
-    /**
-     * Parameterized constructor.
-     *
-     * @param isbn the book ISBN
-     * @param title the book title
-     * @param description the book description
-     * @param numOfPages the number of pages
-     * @param authors the list of authors
-     */
-    public Book(String isbn, String title, String description, int numOfPages, List<String> authors) {
+    public Book(String isbn, String title, String description, String infoUrl, int numOfPages) {
         this.isbn = isbn;
         this.title = title;
         this.description = description;
+        this.infoUrl = infoUrl;
         this.numOfPages = numOfPages;
-        this.authors = authors;
     }
 
     public String getIsbn() {
@@ -65,6 +51,14 @@ public class Book {
         this.description = description;
     }
 
+    public String getInfoUrl() {
+        return infoUrl;
+    }
+
+    public void setInfoUrl(String infoUrl) {
+        this.infoUrl = infoUrl;
+    }
+
     public int getNumOfPages() {
         return numOfPages;
     }
@@ -73,17 +67,9 @@ public class Book {
         this.numOfPages = numOfPages;
     }
 
-    public List<String> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<String> authors) {
-        this.authors = authors;
-    }
-
     @Override
     public String toString() {
         return "Book{isbn=" + isbn + ", title=" + title + ", description=" + description
-                + ", numOfPages=" + numOfPages + ", authors=" + authors + "}";
+                + ", infoUrl=" + infoUrl + ", numOfPages=" + numOfPages + "}";
     }
 }

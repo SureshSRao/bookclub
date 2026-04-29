@@ -1,11 +1,11 @@
 /*
- * Suresh, S. (2026). CIS 530 Server-Side Development. Bellevue University.
+ * Suresh, Sripathi Rao. (2026). CIS 530 Server-Side Development. Bellevue University.
  */
 
 package com.bookclub.web;
 
 import com.bookclub.model.Book;
-import com.bookclub.service.impl.MemBookDao;
+import com.bookclub.service.impl.RestBookDao;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +29,7 @@ public class HomeController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String showHome(Model model) {
-        MemBookDao bookDao = new MemBookDao();
+        RestBookDao bookDao = new RestBookDao();
         List<Book> books = bookDao.list();
 
         model.addAttribute("books", books);
@@ -67,7 +67,7 @@ public class HomeController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public String getMonthlyBook(@PathVariable("id") String id, Model model) {
-        MemBookDao bookDao = new MemBookDao();
+        RestBookDao bookDao = new RestBookDao();
         Book book = bookDao.find(id);
 
         model.addAttribute("book", book);
