@@ -8,13 +8,14 @@ import com.bookclub.model.WishlistItem;
 import com.bookclub.service.dao.WishlistDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * MongoWishlistDao class.
- * This class provides MongoDB persistence for wishlist items.
+ * MongoWishlistDao provides MongoDB CRUD operations for WishlistItem objects.
  */
 @Repository("wishlistDao")
 public class MongoWishlistDao implements WishlistDao {
@@ -23,9 +24,9 @@ public class MongoWishlistDao implements WishlistDao {
     private MongoTemplate mongoTemplate;
 
     /**
-     * Adds a new wishlist item to MongoDB.
+     * Adds a wishlist item to MongoDB.
      *
-     * @param entity the wishlist item to add
+     * @param entity the wishlist item to save
      */
     @Override
     public void add(WishlistItem entity) {
@@ -35,54 +36,59 @@ public class MongoWishlistDao implements WishlistDao {
     /**
      * Updates an existing wishlist item in MongoDB.
      *
-     * @param entity the wishlist item to update
+     * @param entity the wishlist item containing updated values
      */
     @Override
     public void update(WishlistItem entity) {
-        mongoTemplate.save(entity);
+        WishlistItem wishlistItem = mongoTemplate.findById(entity.getId(), WishlistItem.class);
+
+        if (wishlistItem != null) {
+            wishlistItem.setIsbn(entity.getIsbn());
+            wishlistItem.setTitle(entity.getTitle());
+            wishlistItem.setUsername(entity.getUsername());
+
+            mongoTemplate.save(wishlistItem);
+        }
     }
 
     /**
-     * Removes a wishlist item from MongoDB.
+     * Removes a wishlist item from MongoDB by id.
      *
-     * @param entity the wishlist item to remove
-     * @return true if removed; otherwise false
+     * @param key the MongoDB document id
+     * @return true when the remove operation completes
      */
     @Override
-    public boolean remove(WishlistItem entity) {
-        WishlistItem deletedItem = mongoTemplate.findAndRemove(
-                org.springframework.data.mongodb.core.query.Query.query(
-                        org.springframework.data.mongodb.core.query.Criteria.where("isbn").is(entity.getIsbn())
-                ),
-                WishlistItem.class
-        );
+    public boolean remove(String key) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(key));
 
-        return deletedItem != null;
+        mongoTemplate.remove(query, WishlistItem.class);
+
+        return true;
     }
 
     /**
-     * Returns all wishlist items.
+     * Returns wishlist items for a specific username.
      *
-     * @return list of wishlist items
+     * @param username the authenticated username
+     * @return list of wishlist items owned by the user
      */
     @Override
-    public List<WishlistItem> list() {
-        return mongoTemplate.findAll(WishlistItem.class);
+    public List<WishlistItem> list(String username) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("username").is(username));
+
+        return mongoTemplate.find(query, WishlistItem.class);
     }
 
     /**
-     * Finds a wishlist item by ISBN.
+     * Finds a wishlist item by MongoDB document id.
      *
-     * @param key the ISBN value
-     * @return matching WishlistItem or null if not found
+     * @param key the MongoDB document id
+     * @return the matching wishlist item
      */
     @Override
     public WishlistItem find(String key) {
-        return mongoTemplate.findOne(
-                org.springframework.data.mongodb.core.query.Query.query(
-                        org.springframework.data.mongodb.core.query.Criteria.where("isbn").is(key)
-                ),
-                WishlistItem.class
-        );
+        return mongoTemplate.findById(key, WishlistItem.class);
     }
 }

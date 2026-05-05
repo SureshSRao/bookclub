@@ -7,10 +7,10 @@ package com.bookclub.service;
 import java.util.List;
 
 /**
- * GenericCrudDao interface.
+ * GenericCrudDao defines common CRUD operations for DAO classes.
  *
- * @param <E> entity type
- * @param <K> key type
+ * @param <E> the entity type managed by the DAO
+ * @param <K> the key type used to find, list, or remove entities
  */
 public interface GenericCrudDao<E, K> {
 
@@ -24,30 +24,31 @@ public interface GenericCrudDao<E, K> {
     /**
      * Updates an existing entity.
      *
-     * @param entity the entity to update
+     * @param entity the entity containing updated values
      */
     void update(E entity);
 
     /**
-     * Removes an entity.
+     * Removes an entity by key.
      *
-     * @param entity the entity to remove
-     * @return true if removed; otherwise false
+     * @param key the key used to identify the entity to remove
+     * @return true when the remove operation completes
      */
-    boolean remove(E entity);
+    boolean remove(K key);
 
     /**
-     * Returns a list of entities.
+     * Returns a list of entities filtered by key.
      *
-     * @return list of entities
+     * @param key the key used to filter the list
+     * @return a list of matching entities
      */
-    List<E> list();
+    List<E> list(K key);
 
     /**
-     * Finds an entity by key.
+     * Finds one entity by key.
      *
-     * @param key the lookup key
-     * @return matching entity
+     * @param key the key used to find the entity
+     * @return the matching entity
      */
     E find(K key);
 }

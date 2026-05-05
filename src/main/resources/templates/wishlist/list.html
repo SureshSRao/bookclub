@@ -4,35 +4,47 @@
     <meta charset="UTF-8">
     <title>Bookclub | Wishlist</title>
 
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
           rel="stylesheet">
 </head>
 <body>
 
+<!-- Header -->
 <div th:insert="~{fragments/header :: header}"></div>
 
 <main class="py-5 container" style="width: 50%;">
-    <div class="text-center" id="wishlist2"></div>
 
+    <!-- Page Title -->
+    <div class="text-center">
+        <h1>My Wishlist</h1>
+    </div>
+
+    <!-- New Item Button -->
     <p class="text-center">
-        <a href="/wishlist/new"
-           th:href="@{/wishlist/new}"
-           class="btn btn-outline-secondary text-center">New Wishlist Item</a>
+        <a th:href="@{/wishlist/new}"
+           class="btn btn-outline-secondary">New Wishlist Item</a>
     </p>
 
+    <!-- Table Render Area -->
     <div id="wishlist"></div>
+
 </main>
 
+<!-- Footer -->
 <div th:insert="~{fragments/footer :: footer}"></div>
+
+<!-- Scripts -->
 <div th:insert="~{fragments/scriptFooter :: scriptFooter}"></div>
 
 <script>
+    /**
+     * HttpClient class for making API calls
+     */
     class HttpClient {
         async get(url, params = "") {
             url = new URL(url);
             url.search = new URLSearchParams(params).toString();
-
-            console.log(url.toString());
 
             const res = await fetch(url.toString(), {
                 method: 'GET'
@@ -42,11 +54,16 @@
         }
     }
 
+    /**
+     * Builds the wishlist table dynamically
+     * @param books list of wishlist items
+     * @returns HTML table string
+     */
     function buildTable(books) {
         let tableString = '<table class="table"><tr><th>ISBN</th><th>Title</th><th>Functions</th></tr>';
 
         for (let book of books) {
-            tableString += `<tr><td>${book.isbn}</td><td>${book.title}</td><td><a href="#">Edit</a> | <a href="#">Delete</a></td></tr>`;
+            tableString += `<tr><td>${book.isbn}</td><td>${book.title}</td><td><a href="/wishlist/${book.id}">Edit</a> | <a href="/wishlist/remove/${book.id}">Delete</a></td></tr>`;
         }
 
         tableString += '</table>';
@@ -54,14 +71,17 @@
         return tableString;
     }
 
+    // Create HTTP client instance
     const http = new HttpClient();
 
-    http.get('http://localhost:8080/api/wishlist').then(res => {
-        console.log(res);
-        document.getElementById('wishlist').innerHTML = buildTable(res);
-    }).catch(e => {
-        console.log(e);
-    });
+    // Call REST API and render table
+    http.get('http://localhost:8080/api/wishlist')
+        .then(res => {
+            document.getElementById('wishlist').innerHTML = buildTable(res);
+        })
+        .catch(err => {
+            console.error(err);
+        });
 </script>
 
 </body>

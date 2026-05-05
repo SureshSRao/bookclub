@@ -9,8 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 
 /**
- * WishlistItem model class.
- * This class stores information for a single wishlist item.
+ * WishlistItem represents a single book entry stored in a user's wishlist.
  */
 public class WishlistItem {
 
@@ -25,17 +24,19 @@ public class WishlistItem {
     @NotEmpty(message = "Title is a required field.")
     private String title;
 
+    private String username;
+
     /**
-     * Default constructor.
+     * Creates an empty WishlistItem object.
      */
     public WishlistItem() {
     }
 
     /**
-     * Parameterized constructor.
+     * Creates a WishlistItem with an ISBN and title.
      *
-     * @param isbn the item ISBN
-     * @param title the item title
+     * @param isbn the ISBN value
+     * @param title the title value
      */
     public WishlistItem(String isbn, String title) {
         this.isbn = isbn;
@@ -43,27 +44,27 @@ public class WishlistItem {
     }
 
     /**
-     * Returns the id.
+     * Sets the MongoDB document id.
      *
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Sets the id.
-     *
-     * @param id the id value
+     * @param id the document id
      */
     public void setId(String id) {
         this.id = id;
     }
 
     /**
+     * Returns the MongoDB document id.
+     *
+     * @return the document id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
      * Returns the ISBN.
      *
-     * @return the isbn
+     * @return the ISBN value
      */
     public String getIsbn() {
         return isbn;
@@ -72,7 +73,7 @@ public class WishlistItem {
     /**
      * Sets the ISBN.
      *
-     * @param isbn the isbn value
+     * @param isbn the ISBN value
      */
     public void setIsbn(String isbn) {
         this.isbn = isbn;
@@ -81,7 +82,7 @@ public class WishlistItem {
     /**
      * Returns the title.
      *
-     * @return the title
+     * @return the title value
      */
     public String getTitle() {
         return title;
@@ -96,8 +97,32 @@ public class WishlistItem {
         this.title = title;
     }
 
+    /**
+     * Returns the username associated with the wishlist item.
+     *
+     * @return the username value
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Sets the username associated with the wishlist item.
+     *
+     * @param username the authenticated username
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * Returns a formatted string representation of the wishlist item.
+     *
+     * @return formatted WishlistItem string
+     */
     @Override
     public String toString() {
-        return "WishlistItem{id=" + id + ", isbn=" + isbn + ", title=" + title + "}";
+        return "WishlistItem{id=" + id + ", isbn=" + isbn + ", title=" + title
+                + ", username=" + username + "}";
     }
 }

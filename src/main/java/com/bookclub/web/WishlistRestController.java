@@ -6,8 +6,8 @@ package com.bookclub.web;
 
 import com.bookclub.model.WishlistItem;
 import com.bookclub.service.dao.WishlistDao;
-import com.bookclub.service.impl.MongoWishlistDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,18 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * WishlistRestController class.
- * This class exposes RESTful endpoints for wishlist items.
+ * WishlistRestController exposes REST endpoints for wishlist data.
  */
 @RestController
 @RequestMapping(path = "/api/wishlist", produces = "application/json")
 @CrossOrigin(origins = "*")
 public class WishlistRestController {
 
-    private WishlistDao wishlistDao = new MongoWishlistDao();
+    private WishlistDao wishlistDao;
 
     /**
-     * Sets the wishlist DAO.
+     * Injects the WishlistDao implementation.
      *
      * @param wishlistDao the wishlist DAO implementation
      */
@@ -38,20 +37,23 @@ public class WishlistRestController {
     }
 
     /**
-     * Returns all wishlist items.
+     * Returns wishlist items for the currently authenticated user.
      *
-     * @return list of wishlist items
+     * @param authentication the current authentication object
+     * @return list of wishlist items for the authenticated user
      */
     @RequestMapping(method = RequestMethod.GET)
-    public List<WishlistItem> showWishlist() {
-        return wishlistDao.list();
+    public List<WishlistItem> showWishlist(Authentication authentication) {
+        String username = authentication.getName();
+
+        return wishlistDao.list(username);
     }
 
     /**
-     * Returns a wishlist item by id.
+     * Returns one wishlist item by id.
      *
      * @param id the wishlist item id
-     * @return matching wishlist item
+     * @return the matching wishlist item
      */
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public WishlistItem findById(@PathVariable String id) {
