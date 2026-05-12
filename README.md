@@ -17,3 +17,5 @@ Assignment 6.2 - RESTful Controllers - 4/20/2026
 Assignment 7.2 - OpenLibrary API - 4/28/2026
 
 Assignment 8.2 - CRUD Operations - 5/5/2026
+
+Assignment 9.2 - Authorization in Action - 5/11/2026

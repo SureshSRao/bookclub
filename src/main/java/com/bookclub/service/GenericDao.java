@@ -7,7 +7,7 @@ package com.bookclub.service;
 import java.util.List;
 
 /**
- * GenericDao interface.
+ * GenericDao defines read-only DAO operations.
  *
  * @param <E> entity type
  * @param <K> key type
@@ -15,14 +15,15 @@ import java.util.List;
 public interface GenericDao<E, K> {
 
     /**
-     * Returns a list of entities.
+     * Returns a list of entities filtered by key.
      *
+     * @param key the filter key
      * @return list of entities
      */
-    List<E> list();
+    List<E> list(K key);
 
     /**
-     * Finds an entity by key.
+     * Finds one entity by key.
      *
      * @param key the lookup key
      * @return matching entity

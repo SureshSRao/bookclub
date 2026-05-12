@@ -63,11 +63,8 @@ public class RestBookDao implements BookDao {
      * @return list of books
      */
     @Override
-    public List<Book> list() {
-        String isbnString = "ISBN:9780593099322,ISBN:9780261102361,ISBN:9780261102378,"
-                + "ISBN:9780399501487,ISBN:9780316769532";
-
-        Object doc = getBooksDoc(isbnString);
+    public List<Book> list(String key) {
+        Object doc = getBooksDoc(key);
 
         List<Book> books = new ArrayList<>();
         List<String> isbns = JsonPath.read(doc, "$.*.bib_key");

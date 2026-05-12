@@ -58,6 +58,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login", "/css/**").permitAll()
+                        .requestMatchers("/monthly-books", "/monthly-books/list", "/monthly-books/new", "/monthly-books/remove/**")
+                        .hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
