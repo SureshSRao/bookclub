@@ -19,3 +19,6 @@ Assignment 7.2 - OpenLibrary API - 4/28/2026
 Assignment 8.2 - CRUD Operations - 5/5/2026
 
 Assignment 9.2 - Authorization in Action - 5/11/2026
+
+Assignment 10.2 - Unit Tests in Action - 5/18/2026
+ 
