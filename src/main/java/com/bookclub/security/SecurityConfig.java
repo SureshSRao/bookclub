@@ -1,5 +1,5 @@
 /*
- * Suresh, Sripathi Rao. (2026). CIS 530 Server-Side Development. Bellevue University.
+ * Suresh, Sripathi Rao. (2026). CIS 530 Server-Side Development.
  */
 
 package com.bookclub.security;
@@ -7,73 +7,101 @@ package com.bookclub.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * SecurityConfig class.
- * This class configures application authentication and authorization rules.
+ * SecurityConfig configures authentication and authorization
+ * rules for the Bookclub application.
  */
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     /**
-     * Configures the password encoder.
+     * Configures Spring Security filter chain.
      *
-     * @return password encoder
+     * @param http the HttpSecurity object
+     * @return configured SecurityFilterChain
+     * @throws Exception if configuration fails
      */
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+            .authorizeHttpRequests(authorize -> authorize
+
+                // Public resources
+                .requestMatchers(
+                        "/login",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**"
+                ).permitAll()
+
+                // Admin-only pages
+                .requestMatchers(
+                        "/monthly-books",
+                        "/monthly-books/**"
+                ).hasRole("ADMIN")
+
+                // All other requests require authentication
+                .anyRequest().authenticated()
+            )
+
+            // Form login configuration
+            .formLogin(form -> form
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/", true)
+                    .permitAll()
+            )
+
+            // Logout configuration
+            .logout(logout -> logout
+                    .logoutSuccessUrl("/login?logout=true")
+                    .permitAll()
+            )
+
+            // Enable HTTP Basic authentication
+            .httpBasic(Customizer.withDefaults());
+
+        return http.build();
     }
 
     /**
-     * Configures in-memory users.
+     * Creates in-memory users for authentication.
      *
-     * @param http the HttpSecurity object
-     * @param passwordEncoder the password encoder
-     * @return security filter chain
-     * @throws Exception if a configuration error occurs
+     * Preloaded Accounts:
+     * user/password
+     * testuser01/password01
+     *
+     * @return configured UserDetailsService
      */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
-        AuthenticationManagerBuilder authBuilder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
+    public UserDetailsService users() {
 
-        authBuilder
-                .inMemoryAuthentication()
-                .withUser(User.withUsername("user")
-                        .password(passwordEncoder.encode("password"))
-                        .roles("USER"))
-                .withUser(User.withUsername("admin")
-                        .password(passwordEncoder.encode("password"))
-                        .roles("USER", "ADMIN"));
+        UserDetails user = User.withUsername("user")
+                .password("{noop}password")
+                .roles("USER")
+                .build();
 
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/css/**").permitAll()
-                        .requestMatchers("/monthly-books", "/monthly-books/list", "/monthly-books/new", "/monthly-books/remove/**")
-                        .hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")
-                        .invalidateHttpSession(true)
-                        .permitAll()
-                )
-                .httpBasic(Customizer.withDefaults());
+        UserDetails testUser = User.withUsername("testuser01")
+                .password("{noop}password01")
+                .roles("USER")
+                .build();
 
-        return http.build();
+        UserDetails admin = User.withUsername("admin")
+                .password("{noop}admin")
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(
+                user,
+                testUser,
+                admin
+        );
     }
 }
